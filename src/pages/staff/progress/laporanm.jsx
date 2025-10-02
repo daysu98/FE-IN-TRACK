@@ -4,7 +4,17 @@ import { Footer } from "../../../components/footer";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+	FaCheckCircle,
+	FaChevronLeft,
+	FaChevronRight,
+	FaPen,
+	FaTrash,
+} from "react-icons/fa";
+import { swalDialog, swalMixin } from "/src/library/sweetalert";
+import { Modal } from "/src/components/modal";
+import { ProgressFormModal } from "/src/pages/admin/progres/ProgressFormModal";
+import { IoIosArrowDown } from "react-icons/io";
 
 const DateFilter = ({ currentDate, setCurrentDate }) => {
 	const [isMonthOpen, setMonthOpen] = useState(false);
@@ -53,9 +63,10 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 				<div className="relative">
 					<span
 						onClick={() => setMonthOpen(!isMonthOpen)}
-						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
+						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 inline-flex items-center gap-x-2"
 					>
 						{months[currentDate.getMonth()]}
+						<IoIosArrowDown />
 					</span>
 					{isMonthOpen && (
 						<ul className="absolute top-full mt-2 w-32 bg-white border rounded-lg shadow-lg">
@@ -74,9 +85,10 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 				<div className="relative">
 					<span
 						onClick={() => setYearOpen(!isYearOpen)}
-						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
+						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 inline-flex items-center gap-x-2"
 					>
 						{currentDate.getFullYear()}
+						<IoIosArrowDown />
 					</span>
 					{isYearOpen && (
 						<ul className="absolute top-full mt-2 w-24 bg-white border rounded-lg shadow-lg">
@@ -105,10 +117,13 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 
 export const ProgressStaffPage = () => {
 	const [allProgress, setAllProgress] = useState([]);
-	const [filteredProgress, setFilteredProgress] = useState([]);
 	const [currentDate, setCurrentDate] = useState(new Date());
-	const [currentPage, setCurrentPage] = useState(1);
-	const [itemsPerPage] = useState(10);
+
+	// [MODIFIKASI DIMULAI]: State untuk modal dan filter status
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [editingProgress, setEditingProgress] = useState(null);
+	const [statusFilter, setStatusFilter] = useState("all");
+	// [MODIFIKASI SELESAI]
 
 	const fetchData = async () => {
 		try {
@@ -126,36 +141,81 @@ export const ProgressStaffPage = () => {
 		fetchData();
 	}, []);
 
-	useEffect(() => {
-		const filtered = allProgress.filter((p) => {
+	const handleOpenModalForCreate = () => {
+		setEditingProgress(null);
+		setIsModalOpen(true);
+	};
+
+	const handleOpenModalForEdit = (progress) => {
+		setEditingProgress(progress);
+		setIsModalOpen(true);
+	};
+
+	const handleMarkAsDone = async (id) => {
+		try {
+			await axios.patch(
+				`${import.meta.env.VITE_API_BASE_URL}/api/job_interns/${id}`,
+				{ status: "Done" },
+				{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
+			);
+			swalMixin("success", "Status updated to Done!");
+			fetchData();
+		} catch (error) {
+			swalMixin("error", "Failed to update status.");
+		}
+	};
+
+	const handleDeleteProgress = async (id) => {
+		const confirm = await swalDialog("Are you sure?", "warning");
+		if (!confirm.isConfirmed) return;
+		try {
+			await axios.delete(
+				`${import.meta.env.VITE_API_BASE_URL}/api/job_interns/${id}`,
+				{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
+			);
+			swalMixin("success", "Progress deleted.");
+			fetchData();
+		} catch (error) {
+			swalMixin("error", "Failed to delete progress.");
+		}
+	};
+
+	// [MODIFIKASI DIMULAI]: Logika untuk memfilter progres berdasarkan tanggal dan status
+	const filteredProgress = allProgress
+		.filter((p) => {
 			const progressDate = new Date(p.created_at);
 			return (
 				progressDate.getMonth() === currentDate.getMonth() &&
 				progressDate.getFullYear() === currentDate.getFullYear()
 			);
+		})
+		.filter((p) => {
+			if (statusFilter === "all") return true;
+			return p.status === statusFilter;
 		});
-		setFilteredProgress(filtered);
-		setCurrentPage(1);
-	}, [currentDate, allProgress]);
+	// [MODIFIKASI SELESAI]
 
 	const doneThisMonth = filteredProgress.filter(
 		(p) => p.status === "Done"
 	).length;
-
-	const indexOfLastItem = currentPage * itemsPerPage;
-	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-	const currentItems = filteredProgress.slice(
-		indexOfFirstItem,
-		indexOfLastItem
-	);
-	const totalPages = Math.ceil(filteredProgress.length / itemsPerPage);
-	const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 	return (
 		<div className="bg-gray-50 text-gray-900">
 			<HeaderA />
 			<Sidebar />
 			<main className="md:ml-64 p-6 pt-24 transition-all min-h-screen">
+				<Modal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					title={editingProgress ? "Edit Progress" : "Add New Progress"}
+				>
+					<ProgressFormModal
+						progressToEdit={editingProgress}
+						onFormSubmit={fetchData}
+						onClose={() => setIsModalOpen(false)}
+					/>
+				</Modal>
+
 				<div className="bg-white p-6 rounded-xl">
 					<div className="flex flex-col md:flex-row justify-between md:items-center mb-4 gap-4">
 						<div>
@@ -165,11 +225,41 @@ export const ProgressStaffPage = () => {
 								<span>{doneThisMonth} done this month</span>
 							</div>
 						</div>
+						<button
+							onClick={handleOpenModalForCreate}
+							className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm cursor-pointer"
+						>
+							ADD A NEW REPORT
+						</button>
 					</div>
-					<DateFilter
-						currentDate={currentDate}
-						setCurrentDate={setCurrentDate}
-					/>
+
+					<div className="flex flex-col md:flex-row justify-between items-center">
+						<DateFilter
+							currentDate={currentDate}
+							setCurrentDate={setCurrentDate}
+						/>
+						{/* [MODIFIKASI DIMULAI]: Dropdown filter status */}
+						<div>
+							<label
+								htmlFor="statusFilter"
+								className="text-sm font-medium text-gray-700"
+							>
+								Filter by Status:{" "}
+							</label>
+							<select
+								id="statusFilter"
+								value={statusFilter}
+								onChange={(e) => setStatusFilter(e.target.value)}
+								className="border rounded-lg p-2 text-sm cursor-pointer"
+							>
+								<option value="all">All</option>
+								<option value="Pending">Pending</option>
+								<option value="Done">Done</option>
+							</select>
+						</div>
+						{/* [MODIFIKASI SELESAI] */}
+					</div>
+
 					<div className="overflow-x-auto">
 						<table className="w-full text-sm text-left">
 							<thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -178,13 +268,14 @@ export const ProgressStaffPage = () => {
 									<th className="py-3 px-6">TASK</th>
 									<th className="py-3 px-6">DESCRIPTION</th>
 									<th className="py-3 px-6">DEADLINE</th>
-									<th className="py-3 px-6">MANAGE BY</th>
 									<th className="py-3 px-6 text-center">STATUS</th>
+									<th className="py-3 px-6">MANAGE BY</th>
+									<th className="py-3 px-6">ACTION</th>
 								</tr>
 							</thead>
 							<tbody>
-								{currentItems.length > 0 ? (
-									currentItems.map((progres) => (
+								{filteredProgress.length > 0 ? (
+									filteredProgress.map((progres) => (
 										<tr key={progres.id} className="border-b border-gray-200">
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.user?.name}
@@ -192,58 +283,58 @@ export const ProgressStaffPage = () => {
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.task}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 max-w-xs truncate">
+											<td className="px-6 py-4 font-bold text-gray-800 w-50">
 												{progres.description}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800">
+											<td className="px-6 py-4 font-bold text-gray-800 w-33">
 												{progres.deadline_iso}
 											</td>
+											{/* [MODIFIKASI DIMULAI]: Logika baru untuk tampilan status */}
+											<td className="px-6 py-4 text-center">
+												{progres.status === "Pending" ? (
+													<button
+														onClick={() => handleMarkAsDone(progres.id)}
+														className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
+													>
+														Pending
+													</button>
+												) : (
+													<span className="font-bold px-4 py-1 rounded-md text-md text-green-500">
+														Done
+													</span>
+												)}
+											</td>
+											{/* [MODIFIKASI SELESAI] */}
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.manage_by}
 											</td>
-											<td className="px-6 py-4 text-center">
-												<span
-													className={`px-3 py-1 text-xs font-semibold rounded-full text-white ${
-														progres.status === "Done"
-															? "bg-green-500"
-															: "bg-yellow-500"
-													}`}
-												>
-													{progres.status}
-												</span>
+											<td className="px-6 py-4">
+												<div className="flex items-center gap-4 text-sm">
+													<button
+														onClick={() => handleDeleteProgress(progres.id)}
+														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold"
+													>
+														<FaTrash color="red" /> DELETE
+													</button>
+													<button
+														onClick={() => handleOpenModalForEdit(progres)}
+														className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold"
+													>
+														<FaPen color="black" /> EDIT
+													</button>
+												</div>
 											</td>
 										</tr>
 									))
 								) : (
 									<tr>
-										<td colSpan="6" className="text-center py-10 text-gray-500">
-											No data available for this month.
+										<td colSpan="7" className="text-center py-10 text-gray-500">
+											No data available for this filter.
 										</td>
 									</tr>
 								)}
 							</tbody>
 						</table>
-						{totalPages > 1 && (
-							<div className="flex justify-end items-center mt-4">
-								<button
-									onClick={() => paginate(currentPage - 1)}
-									disabled={currentPage === 1}
-									className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
-								>
-									Previous
-								</button>
-								<span className="text-sm text-gray-700 mx-4">
-									Page {currentPage} of {totalPages}
-								</span>
-								<button
-									onClick={() => paginate(currentPage + 1)}
-									disabled={currentPage === totalPages}
-									className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
-								>
-									Next
-								</button>
-							</div>
-						)}
 					</div>
 				</div>
 			</main>

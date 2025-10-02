@@ -64,6 +64,7 @@ export const HeaderA = () => {
 		"/magangs": "Internship",
 		"/jadwal": "Jadwal Piket",
 		"/admin/jadwal": "Jadwal Piket",
+		"/admin/jadwal/details": "Jadwal Piket",
 	};
 
 	const currentPage = pageTitles[location.pathname] || "Pages";

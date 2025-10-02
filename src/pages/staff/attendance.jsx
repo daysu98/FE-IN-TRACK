@@ -26,6 +26,28 @@ export const AttendanceStaffPage = () => {
 		fetchData();
 	}, []);
 
+	const StatusBadge = ({ status }) => {
+		let text = status;
+		let colorClass = "text-gray-400";
+		if (status === "Hadir") {
+			text = "Hadir";
+			colorClass = "text-green-400";
+		}
+		if (status === "Ijin" || status === "Sakit") colorClass = "text-yellow-400";
+		if (status === "Alpa") {
+			text = "Alfa";
+			colorClass = "text-red-400";
+		}
+		if (status === "Late") colorClass = "text-red-400";
+		return (
+			<span
+				className={`px-3 py-1 text-md font-bold rounded-full w-20 text-center ${colorClass}`}
+			>
+				{text}
+			</span>
+		);
+	};
+
 	const indexOfLastItem = currentPage * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 	const currentItems = attendances.slice(indexOfFirstItem, indexOfLastItem);
@@ -74,7 +96,7 @@ export const AttendanceStaffPage = () => {
 											: "-"}
 									</td>
 									<td className="px-6 py-4 font-bold text-gray-800">
-										{attendance.status}
+										<StatusBadge status={attendance.status} />
 									</td>
 								</tr>
 							))}

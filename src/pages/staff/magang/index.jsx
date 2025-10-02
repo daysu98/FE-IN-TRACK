@@ -132,7 +132,7 @@ export const InternshipPage = () => {
 								id="roleFilter"
 								value={filterRole}
 								onChange={(e) => setFilterRole(e.target.value)}
-								className="border rounded-lg p-2 text-sm"
+								className="border rounded-lg p-2 text-sm cursor-pointer"
 							>
 								<option value="all">All</option>
 								<option value="intern">Intern</option>
@@ -146,7 +146,7 @@ export const InternshipPage = () => {
 						<div className="relative">
 							<button
 								onClick={() => setAddDropdownOpen(!isAddDropdownOpen)}
-								className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm flex items-center gap-2"
+								className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm flex items-center gap-2 cursor-pointer"
 							>
 								<FaPlus /> Add New <FaChevronDown size={12} />
 							</button>

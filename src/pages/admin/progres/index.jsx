@@ -2,7 +2,6 @@
 import { Sidebar } from "../../../layouts/sidebar";
 import { HeaderA } from "../../../layouts/header";
 import { Footer } from "../../../components/footer";
-import { Link } from "react-router";
 import {
 	FaPen,
 	FaTrash,
@@ -16,6 +15,7 @@ import Cookies from "js-cookie";
 import { swalDialog, swalMixin } from "../../../library/sweetalert";
 import { Modal } from "../../../components/modal";
 import { ProgressFormModal } from "./ProgressFormModal";
+import { IoIosArrowDown } from "react-icons/io";
 
 const DateFilter = ({ currentDate, setCurrentDate }) => {
 	const [isMonthOpen, setMonthOpen] = useState(false);
@@ -64,9 +64,10 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 				<div className="relative">
 					<span
 						onClick={() => setMonthOpen(!isMonthOpen)}
-						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
+						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 inline-flex items-center gap-x-2"
 					>
 						{months[currentDate.getMonth()]}
+						<IoIosArrowDown />
 					</span>
 					{isMonthOpen && (
 						<ul className="absolute top-full mt-2 w-32 bg-white border rounded-lg shadow-lg">
@@ -85,9 +86,10 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 				<div className="relative">
 					<span
 						onClick={() => setYearOpen(!isYearOpen)}
-						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
+						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 inline-flex items-center gap-x-2"
 					>
 						{currentDate.getFullYear()}
+						<IoIosArrowDown />
 					</span>
 					{isYearOpen && (
 						<ul className="absolute top-full mt-2 w-24 bg-white border rounded-lg shadow-lg">
@@ -226,7 +228,7 @@ export const ProgressPage = () => {
 						</div>
 						<button
 							onClick={handleOpenModalForCreate}
-							className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm"
+							className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm cursor-pointer"
 						>
 							ADD A NEW REPORT
 						</button>
@@ -249,7 +251,7 @@ export const ProgressPage = () => {
 								id="statusFilter"
 								value={statusFilter}
 								onChange={(e) => setStatusFilter(e.target.value)}
-								className="border rounded-lg p-2 text-sm"
+								className="border rounded-lg p-2 text-sm cursor-pointer"
 							>
 								<option value="all">All</option>
 								<option value="Pending">Pending</option>
@@ -282,10 +284,10 @@ export const ProgressPage = () => {
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.task}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 max-w-xs truncate">
+											<td className="px-6 py-4 font-bold text-gray-800 w-50">
 												{progres.description}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800">
+											<td className="px-6 py-4 font-bold text-gray-800 w-33">
 												{progres.deadline_iso}
 											</td>
 											{/* [MODIFIKASI DIMULAI]: Logika baru untuk tampilan status */}
@@ -293,12 +295,12 @@ export const ProgressPage = () => {
 												{progres.status === "Pending" ? (
 													<button
 														onClick={() => handleMarkAsDone(progres.id)}
-														className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600"
+														className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
 													>
 														Pending
 													</button>
 												) : (
-													<span className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-green-500">
+													<span className="font-bold px-4 py-1 rounded-md text-md text-green-500">
 														Done
 													</span>
 												)}

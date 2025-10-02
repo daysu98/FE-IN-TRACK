@@ -43,15 +43,13 @@ const StatCard = ({ title, value, icon, linkTo }) => (
 const WorkProgressItem = ({ task, subtitle, progress, status }) => {
 	const isDone = status === "Done";
 	const statusText = status === "Pending" ? "Progress" : status;
-	const statusColor = isDone
-		? "bg-green-500 text-white"
-		: "bg-gray-500 text-white";
+	const statusColor = isDone ? "text-green-500" : "text-gray-500";
 
 	return (
-		<div className="grid grid-cols-12 gap-3 items-center py-3">
+		<div className="grid grid-cols-9 gap-3 items-center py-3">
 			<div className="col-span-1">
 				<div className="bg-[#4FD1C5] p-2 rounded-full">
-					<FaFileAlt className="text-white text-sm" />
+					<FaFileAlt className="text-white text-sm mx-auto" />
 				</div>
 			</div>
 
@@ -71,36 +69,35 @@ const WorkProgressItem = ({ task, subtitle, progress, status }) => {
 						className="bg-[#4FD1C5] h-2 rounded-full transition-all duration-300"
 						style={{ width: `${progress}%` }}
 					></div>
+					<span
+						className={`px-3 py-1 text-md font-bold rounded-md w-35 text-center inline-block ${statusColor}`}
+					>
+						{statusText}
+					</span>
 				</div>
 			</div>
 
-			<div className="col-span-3 xl:ml-14 lg:ml-0">
-				<span
-					className={`px-3 py-1 text-xs font-semibold rounded-md w-20 text-center inline-block ${statusColor}`}
-				>
-					{statusText}
-				</span>
-			</div>
+			<div className="col-span-3 xl:ml-14 lg:ml-0"></div>
 		</div>
 	);
 };
 
 const StatusBadge = ({ status }) => {
 	let text = status;
-	let colorClass = "bg-gray-400";
+	let colorClass = "text-gray-400";
 	if (status === "Hadir") {
-		text = "Present";
-		colorClass = "bg-green-400";
+		text = "Hadir";
+		colorClass = "text-green-400";
 	}
-	if (status === "Ijin" || status === "Sakit") colorClass = "bg-yellow-400";
+	if (status === "Ijin" || status === "Sakit") colorClass = "text-yellow-400";
 	if (status === "Alpa") {
 		text = "Alfa";
-		colorClass = "bg-red-400";
+		colorClass = "text-red-400";
 	}
-	if (status === "Late") colorClass = "bg-red-400";
+	if (status === "Late") colorClass = "text-red-400";
 	return (
 		<span
-			className={`px-3 py-1 text-xs font-semibold rounded-full w-20 text-center text-white ${colorClass}`}
+			className={`px-3 py-1 text-md font-bold rounded-full w-20 text-center ${colorClass}`}
 		>
 			{text}
 		</span>

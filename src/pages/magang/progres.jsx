@@ -8,12 +8,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { swalMixin } from "../../library/sweetalert";
 import { Modal } from "../../components/modal";
+import { IoIosArrowDown } from "react-icons/io";
 
 const DoneButton = ({ onClick }) => (
 	<div className="relative group flex justify-center">
 		<button
 			onClick={onClick}
-			className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-green-500"
+			className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-green-500 cursor-pointer"
 		>
 			Done
 		</button>
@@ -70,9 +71,10 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 				<div className="relative">
 					<span
 						onClick={() => setMonthOpen(!isMonthOpen)}
-						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
+						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 inline-flex items-center gap-x-2"
 					>
 						{months[currentDate.getMonth()]}
+						<IoIosArrowDown />
 					</span>
 					{isMonthOpen && (
 						<ul className="absolute top-full mt-2 w-32 bg-white border rounded-lg shadow-lg">
@@ -91,9 +93,10 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 				<div className="relative">
 					<span
 						onClick={() => setYearOpen(!isYearOpen)}
-						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
+						className="cursor-pointer hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 inline-flex items-center gap-x-2"
 					>
 						{currentDate.getFullYear()}
+						<IoIosArrowDown />
 					</span>
 					{isYearOpen && (
 						<ul className="absolute top-full mt-2 w-24 bg-white border rounded-lg shadow-lg">
@@ -298,7 +301,7 @@ export const ProgresPageM = () => {
 			<HeaderA />
 			<Sidebar />
 			<main className="md:ml-64 p-6 pt-24 transition-all min-h-screen">
-				<Modal
+				{/* <Modal
 					isOpen={isModalOpen}
 					onClose={() => setIsModalOpen(false)}
 					title="Add New Progress Report"
@@ -308,7 +311,7 @@ export const ProgresPageM = () => {
 						onCreated={fetchData}
 						staffList={staffList}
 					/>
-				</Modal>
+				</Modal> */}
 
 				<div className="bg-white p-6 rounded-xl">
 					<div className="flex flex-col md:flex-row justify-between md:items-center mb-4 gap-4">
@@ -319,12 +322,12 @@ export const ProgresPageM = () => {
 								<span>{doneThisMonth} done this month</span>
 							</div>
 						</div>
-						<button
+						{/* <button
 							onClick={() => setIsModalOpen(true)}
 							className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm"
 						>
 							ADD A NEW REPORT
-						</button>
+						</button> */}
 					</div>
 					<DateFilter
 						currentDate={currentDate}

@@ -85,7 +85,7 @@ const StatusBadge = ({ status }) => {
 	let text = status;
 	let colorClass = "text-gray-400";
 	if (status === "Hadir") {
-		text = "Present";
+		text = "Hadir";
 		colorClass = "text-green-400";
 	}
 	if (status === "Ijin" || status === "Sakit") colorClass = "text-yellow-400";
