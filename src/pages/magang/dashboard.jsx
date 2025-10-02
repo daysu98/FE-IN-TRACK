@@ -36,7 +36,7 @@ const StatCard = ({
 		<hr className="my-3 border-gray-200" />
 		<Link
 			to={linkTo}
-			className="text-gray-500 hover:text-gray-800 flex items-center justify-center gap-2 font-semibold text-sm"
+			className="text-white hover:text-white/80 flex items-center justify-center gap-2 font-semibold text-sm bg-blue-500 w-30 rounded-lg py-2 hover:bg-blue-600 mx-auto"
 		>
 			<span>Check It</span>
 			<FaArrowRight />
@@ -57,8 +57,10 @@ const WorkProgressItem = ({ task, subtitle, progress, status }) => {
 				</div>
 			</div>
 
-			<div className="col-span-5 min-w-0">
-				<p className="font-bold text-sm text-gray-800 mb-1">{task}</p>
+			<div className="col-span-5 min-w-0 overflow-x-hidden">
+				<p className="font-bold text-sm whitespace-nowrap text-gray-800 mb-1 animate-loop-marquee">
+					{task}
+				</p>
 				<p className="text-xs text-gray-500 truncate">{subtitle}</p>
 			</div>
 
@@ -183,7 +185,7 @@ export const DashboardMgPage = () => {
 	};
 
 	const getStatusText = (status) => {
-		if (status === "Hadir") return "Present";
+		if (status === "Hadir") return "Hadir";
 		if (status === "Alpa") return "Alfa";
 		return status || "Alfa";
 	};

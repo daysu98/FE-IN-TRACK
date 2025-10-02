@@ -321,14 +321,14 @@ export const AttendancePage = () => {
 											<div className="flex items-center gap-4 text-sm">
 												<button
 													onClick={() => handleDeleteAttendance(attendance.id)}
-													className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold"
+													className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold cursor-pointer"
 												>
 													<FaTrash color="red" />
 													DELETE
 												</button>
 												<button
 													onClick={() => handleOpenModalForEdit(attendance)}
-													className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold"
+													className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold cursor-pointer"
 												>
 													<FaPen color="black" />
 													EDIT

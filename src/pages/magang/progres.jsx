@@ -60,7 +60,7 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 	};
 
 	return (
-		<div className="flex justify-center items-center gap-4 my-4 relative z-20">
+		<div className="flex justify-center items-center gap-4 my-4 relative">
 			<button
 				onClick={handlePrevMonth}
 				className="p-2 rounded-lg hover:bg-gray-100"
@@ -256,7 +256,7 @@ export const ProgresPageM = () => {
 				{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
 			);
 			// [MODIFIKASI 2 DIMULAI]: Menghapus filter karena API sudah mengembalikan data staff saja
-			setStaffList(res.data);
+			setStaffList(res.data.data);
 		} catch (error) {
 			console.error("Error fetching staff list:", error);
 		}
@@ -301,7 +301,7 @@ export const ProgresPageM = () => {
 			<HeaderA />
 			<Sidebar />
 			<main className="md:ml-64 p-6 pt-24 transition-all min-h-screen">
-				{/* <Modal
+				<Modal
 					isOpen={isModalOpen}
 					onClose={() => setIsModalOpen(false)}
 					title="Add New Progress Report"
@@ -311,7 +311,7 @@ export const ProgresPageM = () => {
 						onCreated={fetchData}
 						staffList={staffList}
 					/>
-				</Modal> */}
+				</Modal>
 
 				<div className="bg-white p-6 rounded-xl">
 					<div className="flex flex-col md:flex-row justify-between md:items-center mb-4 gap-4">
@@ -322,12 +322,12 @@ export const ProgresPageM = () => {
 								<span>{doneThisMonth} done this month</span>
 							</div>
 						</div>
-						{/* <button
+						<button
 							onClick={() => setIsModalOpen(true)}
-							className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm"
+							className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm cursor-pointer"
 						>
 							ADD A NEW REPORT
-						</button> */}
+						</button>
 					</div>
 					<DateFilter
 						currentDate={currentDate}

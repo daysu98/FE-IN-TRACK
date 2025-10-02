@@ -216,13 +216,13 @@ export const UsersPage = () => {
 											<div className="flex items-center gap-4 text-sm">
 												<button
 													onClick={() => handleDeleteUser(user.id)}
-													className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold"
+													className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold cursor-pointer"
 												>
 													<FaTrash color="red" /> DELETE
 												</button>
 												<button
 													onClick={() => handleOpenModalForEdit(user)}
-													className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold"
+													className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold cursor-pointer"
 												>
 													<FaPen color="black" /> EDIT
 												</button>

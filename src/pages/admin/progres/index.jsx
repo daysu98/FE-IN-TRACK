@@ -53,7 +53,7 @@ const DateFilter = ({ currentDate, setCurrentDate }) => {
 	};
 
 	return (
-		<div className="flex justify-center items-center gap-4 my-4 relative z-20">
+		<div className="flex justify-center items-center gap-4 my-4 relative">
 			<button
 				onClick={handlePrevMonth}
 				className="p-2 rounded-lg hover:bg-gray-100"
@@ -124,6 +124,7 @@ export const ProgressPage = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editingProgress, setEditingProgress] = useState(null);
 	const [statusFilter, setStatusFilter] = useState("all");
+	const [manageByFilter, setManageByFilter] = useState("All");
 	// [MODIFIKASI SELESAI]
 
 	const fetchData = async () => {
@@ -182,7 +183,12 @@ export const ProgressPage = () => {
 	};
 
 	// [MODIFIKASI DIMULAI]: Logika untuk memfilter progres berdasarkan tanggal dan status
+	const manageByOptions = [
+		"All",
+		...new Set(allProgress.map((p) => p.manage_by)),
+	];
 	const filteredProgress = allProgress
+		// filter berdasarkan bulan & tahun
 		.filter((p) => {
 			const progressDate = new Date(p.created_at);
 			return (
@@ -190,9 +196,15 @@ export const ProgressPage = () => {
 				progressDate.getFullYear() === currentDate.getFullYear()
 			);
 		})
+		// filter status
 		.filter((p) => {
 			if (statusFilter === "all") return true;
 			return p.status === statusFilter;
+		})
+		// filter manageBy
+		.filter((p) => {
+			if (manageByFilter === "All") return true;
+			return p.manage_by === manageByFilter;
 		});
 	// [MODIFIKASI SELESAI]
 
@@ -270,7 +282,6 @@ export const ProgressPage = () => {
 									<th className="py-3 px-6">DESCRIPTION</th>
 									<th className="py-3 px-6">DEADLINE</th>
 									<th className="py-3 px-6 text-center">STATUS</th>
-									<th className="py-3 px-6">MANAGE BY</th>
 									<th className="py-3 px-6">ACTION</th>
 								</tr>
 							</thead>
@@ -278,13 +289,27 @@ export const ProgressPage = () => {
 								{filteredProgress.length > 0 ? (
 									filteredProgress.map((progres) => (
 										<tr key={progres.id} className="border-b border-gray-200">
-											<td className="px-6 py-4 font-bold text-gray-800">
+											<td className="px-6 py-4 font-bold text-gray-800 w-60">
 												{progres.user?.name}
+												<div className="font-semibold inline-flex justify-center items-center">
+													Manage by: {progres.manage_by}
+													<select
+														className="w-4 h-3 inline-flex items-center"
+														value={manageByFilter}
+														onChange={(e) => setManageByFilter(e.target.value)}
+													>
+														{manageByOptions.map((name) => (
+															<option key={name} value={name}>
+																{name}
+															</option>
+														))}
+													</select>
+												</div>
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.task}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 w-50">
+											<td className="px-6 py-4 font-bold text-gray-800 w-40">
 												{progres.description}
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800 w-33">
@@ -295,7 +320,7 @@ export const ProgressPage = () => {
 												{progres.status === "Pending" ? (
 													<button
 														onClick={() => handleMarkAsDone(progres.id)}
-														className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
+														className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600"
 													>
 														Pending
 													</button>
@@ -306,20 +331,17 @@ export const ProgressPage = () => {
 												)}
 											</td>
 											{/* [MODIFIKASI SELESAI] */}
-											<td className="px-6 py-4 font-bold text-gray-800">
-												{progres.manage_by}
-											</td>
 											<td className="px-6 py-4">
 												<div className="flex items-center gap-4 text-sm">
 													<button
 														onClick={() => handleDeleteProgress(progres.id)}
-														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold"
+														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold cursor-pointer"
 													>
 														<FaTrash color="red" /> DELETE
 													</button>
 													<button
 														onClick={() => handleOpenModalForEdit(progres)}
-														className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold"
+														className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold cursor-pointer"
 													>
 														<FaPen color="black" /> EDIT
 													</button>

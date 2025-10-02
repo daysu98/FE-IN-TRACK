@@ -151,19 +151,19 @@ export const ProgressStaffPage = () => {
 		setIsModalOpen(true);
 	};
 
-	const handleMarkAsDone = async (id) => {
-		try {
-			await axios.patch(
-				`${import.meta.env.VITE_API_BASE_URL}/api/job_interns/${id}`,
-				{ status: "Done" },
-				{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
-			);
-			swalMixin("success", "Status updated to Done!");
-			fetchData();
-		} catch (error) {
-			swalMixin("error", "Failed to update status.");
-		}
-	};
+	// const handleMarkAsDone = async (id) => {
+	// 	try {
+	// 		await axios.patch(
+	// 			`${import.meta.env.VITE_API_BASE_URL}/api/job_interns/${id}`,
+	// 			{ status: "Done" },
+	// 			{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
+	// 		);
+	// 		swalMixin("success", "Status updated to Done!");
+	// 		fetchData();
+	// 	} catch (error) {
+	// 		swalMixin("error", "Failed to update status.");
+	// 	}
+	// };
 
 	const handleDeleteProgress = async (id) => {
 		const confirm = await swalDialog("Are you sure?", "warning");
@@ -269,7 +269,6 @@ export const ProgressStaffPage = () => {
 									<th className="py-3 px-6">DESCRIPTION</th>
 									<th className="py-3 px-6">DEADLINE</th>
 									<th className="py-3 px-6 text-center">STATUS</th>
-									<th className="py-3 px-6">MANAGE BY</th>
 									<th className="py-3 px-6">ACTION</th>
 								</tr>
 							</thead>
@@ -292,12 +291,9 @@ export const ProgressStaffPage = () => {
 											{/* [MODIFIKASI DIMULAI]: Logika baru untuk tampilan status */}
 											<td className="px-6 py-4 text-center">
 												{progres.status === "Pending" ? (
-													<button
-														onClick={() => handleMarkAsDone(progres.id)}
-														className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
-													>
+													<span className="font-bold px-4 py-1 rounded-md text-md text-yellow-500">
 														Pending
-													</button>
+													</span>
 												) : (
 													<span className="font-bold px-4 py-1 rounded-md text-md text-green-500">
 														Done
@@ -305,20 +301,17 @@ export const ProgressStaffPage = () => {
 												)}
 											</td>
 											{/* [MODIFIKASI SELESAI] */}
-											<td className="px-6 py-4 font-bold text-gray-800">
-												{progres.manage_by}
-											</td>
 											<td className="px-6 py-4">
 												<div className="flex items-center gap-4 text-sm">
 													<button
 														onClick={() => handleDeleteProgress(progres.id)}
-														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold"
+														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold cursor-pointer"
 													>
 														<FaTrash color="red" /> DELETE
 													</button>
 													<button
 														onClick={() => handleOpenModalForEdit(progres)}
-														className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold"
+														className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold cursor-pointer"
 													>
 														<FaPen color="black" /> EDIT
 													</button>

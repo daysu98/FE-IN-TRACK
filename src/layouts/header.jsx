@@ -56,7 +56,7 @@ export const HeaderA = () => {
 		"/progress": "Daily Work Report",
 		"/profile": "Profile",
 		"/about": "About Us",
-		"/editprofil": "Edit Profile",
+		"/editprofile": "Edit Profile",
 		"/attendancemg": "Attendance",
 		"/progressmg": "Daily Work Report",
 		"/attendances": "Attendance",
