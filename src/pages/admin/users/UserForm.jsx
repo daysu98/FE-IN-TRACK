@@ -176,24 +176,32 @@ export const UserForm = ({
 				onChange={handleChange}
 			/>
 			<div>
-				<label className="block text-sm font-medium text-gray-700">Photo</label>
-				{preview && (
-					<img
-						src={preview}
-						alt="Preview"
-						className="w-24 h-24 rounded-full object-cover my-2"
-					/>
-				)}
-				<input
-					type="file"
-					name="photo"
-					onChange={handleFileChange}
-					className="w-full text-sm"
-				/>
-				{validationError.photo && (
-					<span className="text-red-500 text-sm mt-1">
-						{validationError.photo[0]}
-					</span>
+				{role === "staff" ? (
+					<span></span>
+				) : (
+					<>
+						<label className="block text-sm font-medium text-gray-700">
+							Photo
+						</label>
+						{preview && (
+							<img
+								src={preview}
+								alt="Preview"
+								className="w-24 h-24 rounded-full object-cover my-2"
+							/>
+						)}
+						<input
+							type="file"
+							name="photo"
+							onChange={handleFileChange}
+							className="w-full text-sm"
+						/>
+						{validationError.photo && (
+							<span className="text-red-500 text-sm mt-1">
+								{validationError.photo[0]}
+							</span>
+						)}
+					</>
 				)}
 			</div>
 			<div className="flex justify-end gap-4 pt-4">

@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { FaChevronDown, FaEye, FaPen, FaPlus, FaTrash } from "react-icons/fa";
 import { Modal } from "/src/components/modal";
 import { UserForm } from "/src/pages/admin/users/UserForm";
+import { swalDialog, swalMixin } from "/src/library/sweetalert";
 
 export const InternshipPage = () => {
 	const [interns, setInterns] = useState([]);
@@ -52,32 +53,32 @@ export const InternshipPage = () => {
 		setAddDropdownOpen(false);
 	};
 
-	// const handleOpenModalForEdit = (user) => {
-	// 	setEditingUser(user);
-	// 	setIsModalOpen(true);
-	// };
+	const handleOpenModalForEdit = (user) => {
+		setEditingUser(user);
+		setIsModalOpen(true);
+	};
 
-	// const handleDeleteUser = async (id) => {
-	// 	const confirm = await swalDialog(
-	// 		"Are you sure you want to delete this user?",
-	// 		"warning"
-	// 	);
-	// 	if (!confirm.isConfirmed) return;
+	const handleDeleteUser = async (id) => {
+		const confirm = await swalDialog(
+			"Are you sure you want to delete this user?",
+			"warning"
+		);
+		if (!confirm.isConfirmed) return;
 
-	// 	try {
-	// 		const response = await axios.delete(
-	// 			`${import.meta.env.VITE_API_BASE_URL}/api/users/${id}`,
-	// 			{
-	// 				headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-	// 			}
-	// 		);
-	// 		swalMixin("success", response.data.message);
-	// 		fetchInterns(); // Re-fetch data
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 		swalMixin("error", "Failed to delete user.");
-	// 	}
-	// };
+		try {
+			const response = await axios.delete(
+				`${import.meta.env.VITE_API_BASE_URL}/api/users/${id}`,
+				{
+					headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+				}
+			);
+			swalMixin("success", response.data.message);
+			fetchInterns(); // Re-fetch data
+		} catch (error) {
+			console.error(error);
+			swalMixin("error", "Failed to delete user.");
+		}
+	};
 
 	useEffect(() => {
 		fetchInterns();
@@ -170,12 +171,20 @@ export const InternshipPage = () => {
 												{new Date(user.created_at).toLocaleDateString() || "-"}
 											</td>
 											<td className="px-6 py-4">
-												<Link
-													to={`/internship/${user.id}`}
-													className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold text-sm"
-												>
-													<FaEye /> View Intern
-												</Link>
+												<div className="flex items-center gap-4 text-sm">
+													<button
+														onClick={() => handleDeleteUser(user.id)}
+														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold cursor-pointer"
+													>
+														<FaTrash color="red" /> DELETE
+													</button>
+													<button
+														onClick={() => handleOpenModalForEdit(user)}
+														className="text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold cursor-pointer"
+													>
+														<FaPen color="black" /> EDIT
+													</button>
+												</div>
 											</td>
 										</tr>
 									))}
