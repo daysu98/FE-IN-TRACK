@@ -11,7 +11,6 @@ import {
 	FaPen,
 	FaTrash,
 } from "react-icons/fa";
-import { swalDialog, swalMixin } from "/src/library/sweetalert";
 import { Modal } from "/src/components/modal";
 import { ProgressFormModal } from "/src/pages/admin/progres/ProgressFormModal";
 import { IoIosArrowDown } from "react-icons/io";
@@ -146,10 +145,10 @@ export const ProgressStaffPage = () => {
 		setIsModalOpen(true);
 	};
 
-	const handleOpenModalForEdit = (progress) => {
-		setEditingProgress(progress);
-		setIsModalOpen(true);
-	};
+	// const handleOpenModalForEdit = (progress) => {
+	// 	setEditingProgress(progress);
+	// 	setIsModalOpen(true);
+	// };
 
 	// const handleMarkAsDone = async (id) => {
 	// 	try {
@@ -165,20 +164,20 @@ export const ProgressStaffPage = () => {
 	// 	}
 	// };
 
-	const handleDeleteProgress = async (id) => {
-		const confirm = await swalDialog("Are you sure?", "warning");
-		if (!confirm.isConfirmed) return;
-		try {
-			await axios.delete(
-				`${import.meta.env.VITE_API_BASE_URL}/api/job_interns/${id}`,
-				{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
-			);
-			swalMixin("success", "Progress deleted.");
-			fetchData();
-		} catch (error) {
-			swalMixin("error", "Failed to delete progress.");
-		}
-	};
+	// const handleDeleteProgress = async (id) => {
+	// 	const confirm = await swalDialog("Are you sure?", "warning");
+	// 	if (!confirm.isConfirmed) return;
+	// 	try {
+	// 		await axios.delete(
+	// 			`${import.meta.env.VITE_API_BASE_URL}/api/job_interns/${id}`,
+	// 			{ headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
+	// 		);
+	// 		swalMixin("success", "Progress deleted.");
+	// 		fetchData();
+	// 	} catch (error) {
+	// 		swalMixin("error", "Failed to delete progress.");
+	// 	}
+	// };
 
 	// [MODIFIKASI DIMULAI]: Logika untuk memfilter progres berdasarkan tanggal dan status
 	const filteredProgress = allProgress
@@ -265,11 +264,12 @@ export const ProgressStaffPage = () => {
 							<thead className="text-xs text-gray-700 uppercase bg-gray-50">
 								<tr>
 									<th className="py-3 px-6">INTERN'S NAME</th>
-									<th className="py-3 px-6">TASK</th>
-									<th className="py-3 px-6">DESCRIPTION</th>
+									<th className="py-3 px-6">
+										TASK &<br />
+										DESCRIPTION
+									</th>
 									<th className="py-3 px-6">DEADLINE</th>
 									<th className="py-3 px-6 text-center">STATUS</th>
-									<th className="py-3 px-6">ACTION</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -280,10 +280,8 @@ export const ProgressStaffPage = () => {
 												{progres.user?.name}
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800">
-												{progres.task}
-											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 w-50">
-												{progres.description}
+												<div>{progres.task}</div>
+												<div className="font-normal">{progres.description}</div>
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800 w-33">
 												{progres.deadline_iso}
@@ -301,7 +299,7 @@ export const ProgressStaffPage = () => {
 												)}
 											</td>
 											{/* [MODIFIKASI SELESAI] */}
-											<td className="px-6 py-4">
+											{/* <td className="px-6 py-4">
 												<div className="flex items-center gap-4 text-sm">
 													<button
 														onClick={() => handleDeleteProgress(progres.id)}
@@ -316,7 +314,7 @@ export const ProgressStaffPage = () => {
 														<FaPen color="black" /> EDIT
 													</button>
 												</div>
-											</td>
+											</td> */}
 										</tr>
 									))
 								) : (

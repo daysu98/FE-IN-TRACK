@@ -280,8 +280,10 @@ export const ProgressPage = () => {
 									<th className="py-3 px-6">INTERN'S NAME</th>
 									<th className="py-3 px-6">TASK</th>
 									<th className="py-3 px-6">DESCRIPTION</th>
-									<th className="py-3 px-6">DEADLINE</th>
-									<th className="py-3 px-6 text-center">STATUS</th>
+									<th className="py-3 px-6 text-center">
+										DEADLINE
+										<br />& STATUS
+									</th>
 									<th className="py-3 px-6">ACTION</th>
 								</tr>
 							</thead>
@@ -312,11 +314,25 @@ export const ProgressPage = () => {
 											<td className="px-6 py-4 font-bold text-gray-800 w-40">
 												{progres.description}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 w-33">
+											<td className="px-6 py-4 font-bold text-gray-800 w-35 text-center">
 												{progres.deadline_iso}
+												<div className="mt-1">
+													{progres.status === "Pending" ? (
+														<button
+															onClick={() => handleMarkAsDone(progres.id)}
+															className="font-semibold px-4 py-1 rounded-md text-sm text-white bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
+														>
+															Pending
+														</button>
+													) : (
+														<span className="font-bold px-4 py-1 rounded-md text-md text-green-500">
+															Done
+														</span>
+													)}
+												</div>
 											</td>
 											{/* [MODIFIKASI DIMULAI]: Logika baru untuk tampilan status */}
-											<td className="px-6 py-4 text-center">
+											{/* <td className="px-6 py-4 text-center">
 												{progres.status === "Pending" ? (
 													<button
 														onClick={() => handleMarkAsDone(progres.id)}
@@ -329,10 +345,10 @@ export const ProgressPage = () => {
 														Done
 													</span>
 												)}
-											</td>
+											</td> */}
 											{/* [MODIFIKASI SELESAI] */}
 											<td className="px-6 py-4">
-												<div className="flex items-center gap-4 text-sm">
+												<div className="grid grid-rows-2 gap-y-1 text-sm">
 													<button
 														onClick={() => handleDeleteProgress(progres.id)}
 														className="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold cursor-pointer"

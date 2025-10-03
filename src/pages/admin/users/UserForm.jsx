@@ -35,6 +35,8 @@ export const UserForm = ({
 	const [validationError, setValidationError] = useState({});
 	const [loading, setLoading] = useState(false);
 
+	const role = Cookies.get("role");
+
 	useEffect(() => {
 		if (userToEdit) {
 			setForm({
@@ -133,25 +135,31 @@ export const UserForm = ({
 				onChange={handleChange}
 				error={validationError.email}
 			/>
-			<div>
-				<label className="block text-sm font-medium text-gray-700">Role</label>
-				<select
-					name="role"
-					value={form.role}
-					onChange={handleChange}
-					className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg"
-					disabled={!!userToEdit}
-				>
-					<option value="intern">Intern</option>
-					<option value="staff">Staff</option>
-					<option value="admin">Admin</option>
-				</select>
-				{validationError.role && (
-					<span className="text-red-500 text-sm mt-1">
-						{validationError.role[0]}
-					</span>
-				)}
-			</div>
+			{role === "staff" ? (
+				<span></span>
+			) : (
+				<div>
+					<label className="block text-sm font-medium text-gray-700">
+						Role
+					</label>
+					<select
+						name="role"
+						value={form.role}
+						onChange={handleChange}
+						className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg"
+						disabled={!!userToEdit}
+					>
+						<option value="intern">Intern</option>
+						<option value="staff">Staff</option>
+						<option value="admin">Admin</option>
+					</select>
+					{validationError.role && (
+						<span className="text-red-500 text-sm mt-1">
+							{validationError.role[0]}
+						</span>
+					)}
+				</div>
+			)}
 			<InputField
 				label={userToEdit ? "New Password (Optional)" : "Password"}
 				type="password"

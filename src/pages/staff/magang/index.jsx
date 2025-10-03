@@ -6,17 +6,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { FaChevronDown, FaEye, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { Modal } from "/src/components/modal";
+import { UserForm } from "/src/pages/admin/users/UserForm";
 
 export const InternshipPage = () => {
 	const [interns, setInterns] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage] = useState(10);
-	// const [isModalOpen, setIsModalOpen] = useState(false);
-	// const [editingUser, setEditingUser] = useState(null);
-	// const [defaultRole, setDefaultRole] = useState("intern");
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [editingUser, setEditingUser] = useState(null);
+	const [defaultRole, setDefaultRole] = useState("intern");
 	// const [filterRole, setFilterRole] = useState("all");
-	// const [isAddDropdownOpen, setAddDropdownOpen] = useState(false);
+	const [isAddDropdownOpen, setAddDropdownOpen] = useState(false);
 
 	const fetchInterns = async () => {
 		setLoading(true);
@@ -43,12 +45,12 @@ export const InternshipPage = () => {
 		}
 	};
 
-	// const handleOpenModalForCreate = (role) => {
-	// 	setEditingUser(null);
-	// 	setDefaultRole(role);
-	// 	setIsModalOpen(true);
-	// 	setAddDropdownOpen(false);
-	// };
+	const handleOpenModalForCreate = (role) => {
+		setEditingUser(null);
+		setDefaultRole(role);
+		setIsModalOpen(true);
+		setAddDropdownOpen(false);
+	};
 
 	// const handleOpenModalForEdit = (user) => {
 	// 	setEditingUser(user);
@@ -93,6 +95,25 @@ export const InternshipPage = () => {
 			<HeaderA />
 			<Sidebar />
 			<main className="md:ml-64 p-6 pt-24 transition-all min-h-screen">
+				<Modal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					title={
+						editingUser
+							? "Edit User"
+							: `Add New ${
+									defaultRole.charAt(0).toUpperCase() + defaultRole.slice(1)
+							  }`
+					}
+				>
+					<UserForm
+						userToEdit={editingUser}
+						onFormSubmit={fetchInterns}
+						onClose={() => setIsModalOpen(false)}
+						defaultRole={defaultRole}
+					/>
+				</Modal>
+
 				<div className="bg-white p-6 rounded-xl overflow-auto">
 					<h3 className="text-xl font-bold mb-2">Internship</h3>
 					<p className="text-gray-500 mb-6">Manage Internship</p>
@@ -105,6 +126,24 @@ export const InternshipPage = () => {
 						</p>
 					) : (
 						<>
+							<div className="relative mb-5">
+								<button
+									onClick={() => setAddDropdownOpen(!isAddDropdownOpen)}
+									className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-semibold text-sm flex items-center gap-2 cursor-pointer"
+								>
+									<FaPlus /> Add New <FaChevronDown size={12} />
+								</button>
+								{isAddDropdownOpen && (
+									<div className="absolute left-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-20">
+										<button
+											onClick={() => handleOpenModalForCreate("intern")}
+											className="w-full text-left block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+										>
+											Add Intern
+										</button>
+									</div>
+								)}
+							</div>
 							<table className="w-full text-sm text-left">
 								<thead className="text-xs text-gray-700 uppercase bg-gray-50">
 									<tr>

@@ -338,8 +338,11 @@ export const ProgresPageM = () => {
 							<thead className="text-xs text-gray-700 uppercase bg-gray-50">
 								<tr>
 									<th className="py-3 px-6">MANAGE BY</th>
-									<th className="py-3 px-6">TASK</th>
-									<th className="py-3 px-6">DESCRIPTION</th>
+									<th className="py-3 px-6">
+										TASK &
+										<br />
+										DESCRIPTION
+									</th>
 									<th className="py-3 px-6">DEADLINE</th>
 									<th className="py-3 px-6 text-center">TOMBOL</th>
 								</tr>
@@ -352,10 +355,8 @@ export const ProgresPageM = () => {
 												{item.manage_by}
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800">
-												{item.task}
-											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 max-w-xs truncate">
-												{item.description}
+												<div>{item.task}</div>
+												<div className="font-normal">{item.description}</div>
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{item.deadline_iso}
