@@ -208,13 +208,11 @@ export const DashboardMgPage = () => {
 					/>
 					<StatCard
 						title="Attendance Today"
-						value={getStatusText(absensiHariIni?.status)}
+						value={getStatusText(absensiHariIni?.status || "-")}
 						icon={<FaClipboardCheck />}
 						linkTo="/attendancemg"
-						valueTextColor={getStatusTextColor(
-							absensiHariIni?.status || "Alpa"
-						)}
-						iconBgColor={getStatusIconBg(absensiHariIni?.status || "Alpa")}
+						valueTextColor={getStatusTextColor(absensiHariIni?.status || "-")}
+						iconBgColor={getStatusIconBg(absensiHariIni?.status || "-")}
 					/>
 					<StatCard
 						title="Total Work"
