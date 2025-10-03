@@ -52,9 +52,11 @@ const WorkProgressItem = ({ task, subtitle, progress, status }) => {
 	return (
 		<div className="grid grid-cols-9 gap-3 items-center py-3">
 			<div className="col-span-1">
-				<div className="bg-[#4FD1C5] p-2 rounded-full">
-					<FaFileAlt className="text-white text-sm mx-auto" />
-				</div>
+				<Link to="/progressmg">
+					<div className="bg-[#4FD1C5] p-2 rounded-full">
+						<FaFileAlt className="text-white text-sm mx-auto" />
+					</div>
+				</Link>
 			</div>
 
 			<div className="col-span-5 min-w-0 overflow-x-hidden">
