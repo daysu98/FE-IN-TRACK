@@ -36,7 +36,7 @@ const StatCard = ({
 		<hr className="my-3 border-gray-200" />
 		<Link
 			to={linkTo}
-			className="text-white hover:text-white/80 flex items-center justify-center gap-2 font-semibold text-sm bg-blue-500 w-full rounded-lg py-2 hover:bg-blue-600 mx-auto"
+			className="text-white hover:text-white/80 flex items-center justify-center gap-2 font-semibold text-sm bg-gray-800 w-full rounded-lg py-2 hover:bg-gray-900 mx-auto"
 		>
 			<span>Check It</span>
 			<FaArrowRight />
@@ -266,7 +266,7 @@ export const DashboardMgPage = () => {
 								<WorkProgressItem
 									key={p.id}
 									task={p.task}
-									subtitle={p.description.substring(0, 20) + "..."}
+									subtitle={p.description}
 									progress={p.status === "Done" ? 100 : 60}
 									status={p.status}
 								/>
