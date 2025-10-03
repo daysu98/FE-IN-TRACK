@@ -278,8 +278,10 @@ export const ProgressPage = () => {
 							<thead className="text-xs text-gray-700 uppercase bg-gray-50">
 								<tr>
 									<th className="py-3 px-6">INTERN'S NAME</th>
-									<th className="py-3 px-6">TASK</th>
-									<th className="py-3 px-6">DESCRIPTION</th>
+									<th className="py-3 px-6">
+										TASK &<br />
+										DESCRIPTION
+									</th>
 									<th className="py-3 px-6 text-center">
 										DEADLINE
 										<br />& STATUS
@@ -309,10 +311,8 @@ export const ProgressPage = () => {
 												</div>
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800">
-												{progres.task}
-											</td>
-											<td className="px-6 py-4 font-bold text-gray-800">
-												{progres.description}
+												<div>{progres.task}</div>
+												<div className="font-normal">{progres.description}</div>
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800 w-35 text-center">
 												{progres.deadline_iso}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import Cookies from "js-cookie";
 import axios from "axios";
 import {
@@ -17,6 +17,7 @@ export const HeaderA = () => {
 	const [currentUser, setCurrentUser] = useState({});
 	const location = useLocation();
 	const navigate = useNavigate();
+	const params = useParams();
 
 	const [searchQuery, setSearchQuery] = useState("");
 	// [MODIFIKASI DIMULAI]: Mengubah state 'results' dan 'showDropdown'
@@ -46,28 +47,37 @@ export const HeaderA = () => {
 		fetchCurrentUser();
 	}, []);
 
-	const pageTitles = {
-		"/dashboardadmin": "Dashboard",
-		"/dashboardstaff": "Dashboard",
-		"/dashboardmg": "Dashboard",
-		"/users": "Users",
-		"/magang": "Magang",
-		"/attendance": "Attendance",
-		"/progress": "Daily Work Report",
-		"/profile": "Profile",
-		"/about": "About Us",
-		"/editprofile": "Edit Profile",
-		"/attendancemg": "Attendance",
-		"/progressmg": "Daily Work Report",
-		"/attendances": "Attendance",
-		"/progresss": "Daily Work Report",
-		"/magangs": "Internship",
-		"/jadwal": "Jadwal Piket",
-		"/admin/jadwal": "Jadwal Piket",
-		"/admin/jadwal/details": "Jadwal Piket",
+	const pageTitle = () => {
+		const pageTitles = {
+			"/dashboardadmin": "Dashboard",
+			"/dashboardstaff": "Dashboard",
+			"/dashboardmg": "Dashboard",
+			"/users": "Users",
+			"/magang": "Magang",
+			"/attendance": "Attendance",
+			"/progress": "Daily Work Report",
+			"/profile": "Profile",
+			"/about": "About Us",
+			"/editprofile": "Edit Profile",
+			"/attendancemg": "Attendance",
+			"/progressmg": "Daily Work Report",
+			"/attendances": "Attendance",
+			"/progresss": "Daily Work Report",
+			"/magangs": "Internship",
+			"/jadwal": "Jadwal Piket",
+			"/admin/jadwal": "Jadwal Piket",
+			"/admin/jadwal/details": "Jadwal Piket",
+			"/internship/:id": "View Intern",
+		};
+
+		let currentPage = pageTitles[location.pathname] || "Pages";
+		if (!currentPage && params.id) {
+			currentPage = pageTitles["/internship/:id"];
+		}
+
+		return currentPage || "Pages";
 	};
 
-	const currentPage = pageTitles[location.pathname] || "Pages";
 	const username = currentUser.name || "Guest";
 
 	const avatarUrl =
@@ -133,8 +143,8 @@ export const HeaderA = () => {
 		<header className="bg-gray-50 fixed top-0 left-0 right-0 z-10 md:ml-64">
 			<div className="flex justify-between items-center p-6">
 				<div>
-					<p className="text-sm text-gray-400">Pages / {currentPage}</p>
-					<h1 className="text-xl font-bold text-gray-800">{currentPage}</h1>
+					<p className="text-sm text-gray-400">Pages / {pageTitle()}</p>
+					<h1 className="text-xl font-bold text-gray-800">{pageTitle()}</h1>
 				</div>
 				<div className="flex items-center gap-4">
 					<div className="relative">
