@@ -311,7 +311,7 @@ export const ProgressPage = () => {
 											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.task}
 											</td>
-											<td className="px-6 py-4 font-bold text-gray-800 w-40">
+											<td className="px-6 py-4 font-bold text-gray-800">
 												{progres.description}
 											</td>
 											<td className="px-6 py-4 font-bold text-gray-800 w-35 text-center">
