@@ -44,7 +44,7 @@ const StatCard = ({
 	</div>
 );
 
-const WorkProgressItem = ({ task, subtitle, progress, status }) => {
+const WorkProgressItem = ({ task, subtitle, status }) => {
 	const isDone = status === "Done";
 	const statusText = status === "Pending" ? "Progress" : status;
 	const statusColor = isDone ? "text-green-500" : "text-gray-500";
@@ -69,16 +69,16 @@ const WorkProgressItem = ({ task, subtitle, progress, status }) => {
 			</div>
 
 			<div className="col-span-3 mr-8">
-				<div className="flex justify-start mb-1">
+				{/* <div className="flex justify-start mb-1">
 					<span className="text-sm font-semibold text-[#4FD1C5]">
 						{progress}%
 					</span>
-				</div>
-				<div className="w-full bg-gray-200 rounded-full h-2">
-					<div
+				</div> */}
+				<div className="w-full bg-white rounded-full h-2">
+					{/* <div
 						className="bg-[#4FD1C5] h-2 rounded-full transition-all duration-300"
 						style={{ width: `${progress}%` }}
-					></div>
+					></div> */}
 					<span
 						className={`px-3 py-1 text-md font-bold rounded-md w-35 text-center inline-block ${statusColor}`}
 					>
